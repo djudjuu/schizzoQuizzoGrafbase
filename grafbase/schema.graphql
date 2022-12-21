@@ -1,0 +1,44 @@
+type Group @model {
+  id: ID!
+  name: String! @unique
+  users: [User]
+}
+
+type User @model {
+  id: ID!
+  name: String! @unique
+  email: String
+  password: String!
+  groups: [Group]
+  responses: [Response]
+}
+
+type Response @model {
+  id: ID!
+  user: User
+  playerId: ID!
+  # questionId: ID!
+  # answerId: ID!
+  answer: Answer
+  question: Question!
+}
+
+type Question @model {
+  id: ID!
+  question: String!
+  answers: [Answer!]!
+  createdBy: User
+}
+
+type Answer @model {
+    id: ID!
+    question: Question!
+    text: String!
+}
+
+type QuizSession @model {
+  id: ID!
+  user: User! @relation(name: "UserQuizSession")
+  playerID: User! @relation(name: "PlayerQuizSession")
+  score: Int
+}
