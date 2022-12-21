@@ -2,6 +2,27 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
+import { graphql } from '../gql'
+
+const getAllQuestions = graphql(/* GraphQL */`
+query {
+  questionCollection(first:100) {
+    edges {
+      node {
+        id 
+        question
+        answers(first:100)	{
+          edges {
+            node {
+              text
+              id
+            }
+          }
+        }
+      }
+    }
+  }
+}`)
 
 const inter = Inter({ subsets: ['latin'] })
 
