@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import Login from '../components/login';
 import Game from '../components/game';
 import { useState, useEffect } from "react";
+import Layout from '../components/Layout';
 // import { useQuery } from '@tanstack/react-query"
 
 const getAllQuestions = graphql(/* GraphQL */`
@@ -50,7 +51,6 @@ export default function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // get player from storage and if doesnt match local player set it
       const fromStorage = getFromStorage("player")
       if (fromStorage !== player) {
         setPlayer(fromStorage)
@@ -64,11 +64,12 @@ export default function Home() {
   if (!puppet) return <Game setPuppet={setPuppet} player={player}/>
 
   return (
-    <>
-    <Text>Hi {player}</Text>
-    <Text>Beantworte diese Fragen so als waerest du {puppet}:</Text>
-    {/* <Questions player={player} puppet={puppet}/> */}
-    <button onClick={() => localStorage.setItem("player", "")}>logout</button>
-    </>
+    <Layout player={player}>
+      <Box>
+        <Text>Hi {player}</Text>
+        <Text>Beantworte diese Fragen so als waerest du {puppet}:</Text>
+        {/* <Questions player={player} puppet={puppet}/> */}
+      </Box>
+    </Layout>
   )
 }
