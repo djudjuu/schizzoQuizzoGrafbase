@@ -11,7 +11,7 @@ import Layout from '../components/Layout';
 // import { useQuery } from '@tanstack/react-query"
 
 const getAllQuestions = graphql(/* GraphQL */`
-query {
+query GetAllQuestions {
   questionCollection(first:100) {
     edges {
       node {
