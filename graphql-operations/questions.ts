@@ -1,6 +1,6 @@
 import { graphql } from "../gql/gql";
 
-const getAllQuestions = graphql(/* GraphQL */`
+export const getAllQuestions = graphql(/* GraphQL */`
 query GetAllQuestions {
   questionCollection(first:100) {
     edges {

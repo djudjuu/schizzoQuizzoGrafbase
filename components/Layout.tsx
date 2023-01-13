@@ -16,7 +16,7 @@ const getFromStorage = (key: string) => {
     }
 }
 
-const Layout = ({ children, player = "" } : {children: ReactNode, player?: string}) => {
+const Layout = ({ children, player = "", setPlayer } : {children: ReactNode, player?: string, setPlayer: any}) => {
     return (
         <Flex
             direction="column"
@@ -38,10 +38,8 @@ const Layout = ({ children, player = "" } : {children: ReactNode, player?: strin
                     SchizzoQuizzo
                 </Text>
                 {player && (
-                    <Text fontSize="xl" fontWeight="bold" onClick={() => {
-                        localStorage.removeItem("player")
-                    }}>
-                    Vergessen!
+                    <Text fontSize="xl" fontWeight="bold" onClick={() => setPlayer("") }>
+                    Vergiss mich!
                 </Text>
                 )}
             </Flex>

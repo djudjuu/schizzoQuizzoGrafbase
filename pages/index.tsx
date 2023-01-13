@@ -8,27 +8,10 @@ import Login from '../components/login';
 import Game from '../components/game';
 import { useState, useEffect } from "react";
 import Layout from '../components/Layout';
-// import { useQuery } from '@tanstack/react-query"
-
-const getAllQuestions = graphql(/* GraphQL */`
-query GetAllQuestions {
-  questionCollection(first:100) {
-    edges {
-      node {
-        id 
-        question
-        answers(first:100)	{
-          edges {
-            node {
-              text
-              id
-            }
-          }
-        }
-      }
-    }
-  }
-}`)
+import { useQuery } from '@tanstack/react-query'
+import { gqlClient } from '../gql/graphql-client'
+import { getAllQuestions } from '../graphql-operations/questions'
+import { Question, QuestionEdge } from '../gql/graphql';
 
 const getFromStorage = (key: string) => {
     if(typeof window !== 'undefined'){
@@ -39,36 +22,41 @@ const getFromStorage = (key: string) => {
     }
 }
 
+const getQuestions = async () => {
+  return gqlClient.request( getAllQuestions )
+}
+
 export default function Home() {
-  const [player, setPlayer] = useState(getFromStorage("player"))
+  const qs = useQuery({ queryKey: ['questions'], queryFn: getQuestions })
+  const [player, setPlayer] = useState("")
   const [puppet, setPuppet] = useState("")
 
   const setPlayerForGame = (player: string) => {
     setPlayer(player)
     setPuppet("")
-    localStorage.setItem("player", player)
   }
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const fromStorage = getFromStorage("player")
-      if (fromStorage !== player) {
-        setPlayer(fromStorage)
-      }
-    }, 2000);
-    return () => clearInterval(interval);
-  }, [player]);
-
-  
   if (!player) return <Login setPlayer={setPlayerForGame}/>
   if (!puppet) return <Game setPuppet={setPuppet} player={player}/>
 
+  if (qs.isLoading) return <div>Loading...</div>
+  if (qs.isError) {
+    console.log('error: ', qs.error)
+    return <div>Error</div>
+  }
+
+  console.log(qs.data?.questionCollection?.edges)
+  const questions = qs.data?.questionCollection?.edges || []
+
   return (
-    <Layout player={player}>
+    <Layout player={player} setPlayer={setPlayerForGame}>
       <Box>
         <Text>Hi {player}</Text>
         <Text>Beantworte diese Fragen so als waerest du {puppet}:</Text>
-        {/* <Questions player={player} puppet={puppet}/> */}
+        {questions != undefined && questions.map((q) => (
+          <div key={q?.node.id}>{q?.node.question}</div>
+          ))
+        }
       </Box>
     </Layout>
   )
