@@ -19,3 +19,6 @@ npx grafbase dev
 ``` 
 
 to see the grafbase backend
+
+log in to https://httpie.io/app
+to have some history of queries and mutations
