@@ -58,7 +58,17 @@ export default function Home() {
         {isLoading ? <div>Loading...</div> : null}
         {isError ? <div>Error</div> : null}
         { questions?.edges?.map(q => (
-          q?.node ?  <div key={q?.node.id}>{q?.node.question}</div> : null
+          q?.node ?  (
+          <div key={q?.node.id}>
+            {q?.node.question}
+            {q?.node?.answers?.edges?.map(a => (
+              a?.node ? (
+              <div key={a?.node.id}>
+                {a?.node.text}
+              </div>
+              ) : null
+            ))}
+            </div>) : null
           ))
         }
       </Box>
