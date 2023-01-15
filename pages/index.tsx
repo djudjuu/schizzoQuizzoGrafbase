@@ -13,6 +13,12 @@ import { gqlClient } from '../gql/graphql-client'
 import { getAllQuestions, getAllResponses, getAllUsers } from '../graphql-operations/questions'
 import { Question, QuestionEdge } from '../gql/graphql';
 
+interface User {
+  name: string
+  id: string
+}
+
+const emptyUser = {name: "", id: ""}
 
 export default function Home() {
   const {data: questions, isLoading, isError} = useQuery(
@@ -30,22 +36,22 @@ export default function Home() {
     }
   )
   
-  const [player, setPlayer] = useState("")
-  const [puppet, setPuppet] = useState("")
+  const [player , setPlayer] = useState(emptyUser)
+  const [puppet, setPuppet] = useState(emptyUser)
 
-  const setPlayerForGame = (player: string) => {
+  const setPlayerForGame = (player: User) => {
     setPlayer(player)
-    setPuppet("")
+    setPuppet(emptyUser)
   }
 
-  if (!player) return <Login setPlayer={setPlayerForGame}/>
-  if (!puppet) return <Game setPuppet={setPuppet} player={player}/>
+  if (!player.name) return <Login setPlayer={setPlayerForGame}/>
+  if (!puppet.name) return <Game setPuppet={setPuppet} player={player}/>
 
   return (
-    <Layout player={player} setPlayer={setPlayerForGame}>
+    <Layout playerName={player.name} setPlayer={setPlayerForGame}>
       <Box>
-        <Text>Hi {player}</Text>
-        <Text>Beantworte diese Fragen so als waerest du {puppet}:</Text>
+        <Text>Hi {player.name}</Text>
+        <Text>Beantworte diese Fragen so als waerest du {puppet.name}:</Text>
         {isLoading ? <div>Loading...</div> : null}
         {isError ? <div>Error</div> : null}
         { questions?.edges?.map(q => (

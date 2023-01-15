@@ -1,24 +1,28 @@
 import { Flex, HStack, Box, Text } from "@chakra-ui/react";
 import router from "next/router";
 import  Layout from "../components/Layout";
+import { useQuery } from '@tanstack/react-query'
+import { gqlClient } from '../gql/graphql-client'
+import { getAllQuestions, getAllResponses, getAllUsers } from '../graphql-operations/questions'
+import { useUsers } from "../hooks/useData";
 
-
-
-const DUMMY_PLAYERS ={ data: {players: [{name: "julius", pw: "123"}, {name: "raio", pw: "321"}]}, error: false}
 
 // function component that renders the login page
-const Login = ({setPlayer}: {setPlayer: any}) => {
-    const { data: players, error } = DUMMY_PLAYERS
-    if (error) return <div>failed to load</div>
-    if (!players) return <div>loading...</div>
+const Login = ({setPlayer}: {setPlayer: (user: {name: string, id: string}) => void}) => {
+    const { users, isLoading, isError } = useUsers()
+
+    if (isError) return <div>failed to load</div>
+    if (isLoading) return <div>loading...</div>
+
     return (
-        <Layout>
+        <Layout playerName="" setPlayer={setPlayer} >
         <Box>
             <Text>Wer bist du?</Text>
             <HStack>
-                {players.players.map((player) => (
-                    <Box key={player.name} onClick={() => setPlayer(player.name)}>
-                        <Text>{player.name}</Text>
+                {users?.map((user) => (
+                    user?.node &&
+                    <Box key={user.node.id} onClick={() => setPlayer(user.node)}>
+                        <Text>{user.node.name}</Text>
                         </Box>
                 ))}
             </HStack>
