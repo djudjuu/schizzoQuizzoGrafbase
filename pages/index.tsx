@@ -1,17 +1,14 @@
 import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
-import { graphql } from '../gql'
-import { usePlayer } from '../hooks/usePlayer'
 import { Flex, HStack, Box, Text } from "@chakra-ui/react";
-import { useRouter } from 'next/router';
 import Login from '../components/login';
 import Game from '../components/game';
 import { useState, useEffect } from "react";
 import Layout from '../components/Layout';
 import { useQuery } from '@tanstack/react-query'
 import { gqlClient } from '../gql/graphql-client'
-import { getAllQuestions, getAllResponses, getAllUsers } from '../graphql-operations/questions'
-import { Question, QuestionEdge } from '../gql/graphql';
+import { getAllQuestions, getAllResponses } from '../graphql-operations/questions'
+import QuestionCard from '../components/QuestionCard'
 
 interface User {
   name: string
@@ -47,6 +44,10 @@ export default function Home() {
   if (!player.name) return <Login setPlayer={setPlayerForGame}/>
   if (!puppet.name) return <Game setPuppet={setPuppet} player={player}/>
 
+  const setAnswer = (answerId: string) => {
+    console.log("setAnswer", answerId)
+  }
+
   return (
     <Layout playerName={player.name} setPlayer={setPlayerForGame}>
       <Box>
@@ -56,17 +57,13 @@ export default function Home() {
         {isError ? <div>Error</div> : null}
         { questions?.edges?.map(q => (
           q?.node ?  (
-          <div key={q?.node.id}>
-            {q?.node.question}
-            {q?.node?.answers?.edges?.map(a => (
-              a?.node ? (
-              <div key={a?.node.id}>
-                {a?.node.text}
-              </div>
-              ) : null
-            ))}
-            </div>) : null
-          ))
+            <div key={q?.node.id}>
+              <QuestionCard 
+              question={q?.node} 
+              setAnswer={setAnswer} /> 
+            </div> 
+          ) : null
+        ))
         }
       </Box>
     </Layout>

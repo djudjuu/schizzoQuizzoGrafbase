@@ -24,7 +24,9 @@ const Game = ({player, setPuppet}: {player: User, setPuppet: (user: User) => voi
         <Box>
             <Text>Als wer moechtest du spielen?</Text>
             <HStack>
-                {users?.filter(x => x?.node.id !== player.id).map((user) => (
+                {
+                users?.filter(x => x?.node.id !== player.id)
+                    .map((user) => (
                     user?.node && (
                     <Box key={user.node.id} onClick={() => setPuppet(user.node)}>
                         <Text>{user.node.name}</Text> 

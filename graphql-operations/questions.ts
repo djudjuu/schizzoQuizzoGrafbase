@@ -7,6 +7,8 @@ query GetAllQuestions {
       node {
         id 
         question
+        createdAt
+        updatedAt
         answers(first:100)	{
           edges {
             node {

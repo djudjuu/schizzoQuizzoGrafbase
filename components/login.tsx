@@ -1,9 +1,5 @@
 import { Flex, HStack, Box, Text } from "@chakra-ui/react";
-import router from "next/router";
 import  Layout from "../components/Layout";
-import { useQuery } from '@tanstack/react-query'
-import { gqlClient } from '../gql/graphql-client'
-import { getAllQuestions, getAllResponses, getAllUsers } from '../graphql-operations/questions'
 import { useUsers } from "../hooks/useData";
 
 
