@@ -16,7 +16,8 @@ type User @model {
 type Response @model {
   id: ID!
   user: User
-  playerId: ID!
+  # playerId: ID!
+  player: User
   # questionId: ID!
   # answerId: ID!
   answer: Answer
