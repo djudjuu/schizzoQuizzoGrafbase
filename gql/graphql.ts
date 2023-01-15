@@ -667,7 +667,7 @@ export type Response = {
   createdAt: Scalars['DateTime'];
   /** Unique identifier */
   id: Scalars['ID'];
-  playerId: Scalars['ID'];
+  player?: Maybe<User>;
   question: Question;
   /** when the model was updated */
   updatedAt: Scalars['DateTime'];
@@ -707,7 +707,7 @@ export type ResponseConnection = {
 /** Input to create a Response */
 export type ResponseCreateInput = {
   answer?: InputMaybe<ResponseAnswerRelateResponseAnswerCreateRelationInput>;
-  playerId: Scalars['ID'];
+  player?: InputMaybe<ResponseResponseRelateUserUserCreateRelationInput>;
   question: ResponseQuestionRelateResponseQuestionCreateRelationInput;
   user?: InputMaybe<ResponseResponseRelateUserUserCreateRelationInput>;
 };
@@ -773,7 +773,7 @@ export type ResponseResponseRelateUserUserUpdateRelationInput = {
 /** Input to update a Response */
 export type ResponseUpdateInput = {
   answer?: InputMaybe<ResponseAnswerRelateResponseAnswerUpdateRelationInput>;
-  playerId?: InputMaybe<Scalars['ID']>;
+  player?: InputMaybe<ResponseResponseRelateUserUserUpdateRelationInput>;
   question?: InputMaybe<ResponseQuestionRelateResponseQuestionUpdateRelationInput>;
   user?: InputMaybe<ResponseResponseRelateUserUserUpdateRelationInput>;
 };
@@ -873,7 +873,6 @@ export type UserGroupRelateUserGroupUpdateRelationInput = {
 /** Input to create a Response for the ResponseRelateUser relation of User */
 export type UserResponseRelateUserResponseCreateInput = {
   answer?: InputMaybe<ResponseAnswerRelateResponseAnswerCreateRelationInput>;
-  playerId: Scalars['ID'];
   question: ResponseQuestionRelateResponseQuestionCreateRelationInput;
 };
 
@@ -909,5 +908,34 @@ export type GetAllQuestionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAllQuestionsQuery = { __typename?: 'Query', questionCollection?: { __typename?: 'QuestionConnection', edges?: Array<{ __typename?: 'QuestionEdge', node: { __typename?: 'Question', id: string, question: string, answers?: { __typename?: 'AnswerConnection', edges?: Array<{ __typename?: 'AnswerEdge', node: { __typename?: 'Answer', text: string, id: string } } | null> | null } | null } } | null> | null } | null };
 
+export type AddAnswerMutationVariables = Exact<{
+  questionId: Scalars['ID'];
+  text: Scalars['String'];
+}>;
+
+
+export type AddAnswerMutation = { __typename?: 'Mutation', answerCreate?: { __typename?: 'AnswerCreatePayload', answer?: { __typename?: 'Answer', text: string, id: string, question: { __typename?: 'Question', question: string } } | null } | null };
+
+export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllUsersQuery = { __typename?: 'Query', userCollection?: { __typename?: 'UserConnection', edges?: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', id: string, name: string } } | null> | null } | null };
+
+export type CreateResponseMutationVariables = Exact<{
+  input: ResponseCreateInput;
+}>;
+
+
+export type CreateResponseMutation = { __typename?: 'Mutation', responseCreate?: { __typename?: 'ResponseCreatePayload', response?: { __typename?: 'Response', id: string } | null } | null };
+
+export type GetAllResponsesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllResponsesQuery = { __typename?: 'Query', responseCollection?: { __typename?: 'ResponseConnection', edges?: Array<{ __typename?: 'ResponseEdge', node: { __typename?: 'Response', question: { __typename?: 'Question', question: string, id: string }, answer?: { __typename?: 'Answer', text: string, id: string } | null, player?: { __typename?: 'User', name: string, id: string } | null, user?: { __typename?: 'User', name: string, id: string } | null } } | null> | null } | null };
+
 
 export const GetAllQuestionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllQuestions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"questionCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"100"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"question"}},{"kind":"Field","name":{"kind":"Name","value":"answers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"100"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetAllQuestionsQuery, GetAllQuestionsQueryVariables>;
+export const AddAnswerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"addAnswer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"questionId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"text"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"answerCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"question"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"link"},"value":{"kind":"Variable","name":{"kind":"Name","value":"questionId"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"text"},"value":{"kind":"Variable","name":{"kind":"Name","value":"text"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"answer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"question"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"question"}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<AddAnswerMutation, AddAnswerMutationVariables>;
+export const GetAllUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getAllUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"100"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetAllUsersQuery, GetAllUsersQueryVariables>;
+export const CreateResponseDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createResponse"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ResponseCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"responseCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"response"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<CreateResponseMutation, CreateResponseMutationVariables>;
+export const GetAllResponsesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getAllResponses"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"responseCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"100"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"question"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"question"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"answer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"player"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetAllResponsesQuery, GetAllResponsesQueryVariables>;

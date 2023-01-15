@@ -10,35 +10,26 @@ import { useState, useEffect } from "react";
 import Layout from '../components/Layout';
 import { useQuery } from '@tanstack/react-query'
 import { gqlClient } from '../gql/graphql-client'
-import { getAllQuestions } from '../graphql-operations/questions'
+import { getAllQuestions, getAllResponses, getAllUsers } from '../graphql-operations/questions'
 import { Question, QuestionEdge } from '../gql/graphql';
 
-// const getFromStorage = (key: string) => {
-//     if(typeof window !== 'undefined'){
-//       return window.localStorage.getItem(key)
-//     }
-//     else {
-//         return "";
-//     }
-// }
-
-const getQuestions = async () => {
-  return gqlClient.request( getAllQuestions )
-}
 
 export default function Home() {
   const {data: questions, isLoading, isError} = useQuery(
     { 
       queryKey: ['questions'], 
-      // queryFn: async () => {return gqlClient.request( getAllQuestions )}
-      queryFn: async () => {
-        const {questionCollection} = await gqlClient.request( getAllQuestions )
-        return questionCollection
-      }
+      queryFn: async () => { return (await gqlClient.request( getAllQuestions )).questionCollection }
     }
   )
-        
-  // const qs = useQuery({ queryKey: ['questions'], queryFn: getQuestions })
+
+  // todo write as hook
+  const {data: responses} = useQuery(
+    { 
+      queryKey: ['responses'], 
+      queryFn: async () => { return (await gqlClient.request( getAllResponses )).responseCollection }
+    }
+  )
+  
   const [player, setPlayer] = useState("")
   const [puppet, setPuppet] = useState("")
 

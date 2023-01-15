@@ -15,7 +15,7 @@ const config: CodegenConfig = {
     }
   },
   ignoreNoDocuments: true,
-  documents: ['./**/*.{ts,tsx}', './graphql-operations/**/*.ts']
+  documents: ['./graphql-operations/**/*.ts']
 }
 
 export default config
